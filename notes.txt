@@ -1,0 +1,8 @@
+            <View style={styles.goalContainer} key={index}>
+              <Text style={styles.textGoal}>{goal}</Text>
+              <View style={styles.actionBtns}>
+                  <Feather name="edit" size={24} color="black" onPress={()=>editGoal(goal)}/>
+                   <AntDesign name="delete" size={24} color="black" />
+               </View> 
+            
+            </View>

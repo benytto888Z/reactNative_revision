@@ -1,7 +1,15 @@
 import { useState } from "react";
-import { StyleSheet, Text, View, Button, TextInput, Alert,ScrollView } from "react-native";
-import Ionicons from '@expo/vector-icons/Ionicons';
-import { Feather,AntDesign } from '@expo/vector-icons'; 
+import {
+  StyleSheet,
+  Text,
+  View,
+  Button,
+  TextInput,
+  Alert,
+  ScrollView,
+  FlatList,
+} from "react-native";
+import { Feather, AntDesign } from "@expo/vector-icons";
 
 export default function App() {
   const [newGoal, setNewGoal] = useState("");
@@ -11,10 +19,10 @@ export default function App() {
   }
   function addGoalHandler() {
     //setCourseGoals([...courseGoals,newGoal])
-    setCourseGoals((prevState) => [...prevState, newGoal]);
+    setCourseGoals((prevState) => [...prevState, {text:newGoal, id:Math.random().toString()}]);
   }
 
-  function editGoal(goalId){
+  function editGoal(goalId) {
     Alert.alert(goalId);
   }
 
@@ -29,20 +37,27 @@ export default function App() {
         <Button title="Add Goal" onPress={addGoalHandler} />
       </View>
       <View style={styles.goalsContainer}>
-      <ScrollView alwaysBounceVertical={false}>
-        {courseGoals.map((goal,index) => {
-          return (
-            <View style={styles.goalContainer} key={index}>
-              <Text style={styles.textGoal}>{goal}</Text>
-              <View style={styles.actionBtns}>
-                  <Feather name="edit" size={24} color="black" onPress={()=>editGoal(goal)}/>
-                   <AntDesign name="delete" size={24} color="black" />
-               </View> 
+        <FlatList
+          alwaysBounceVertical={false}
+          data={courseGoals}
+          renderItem={(itemData) => {
             
-            </View>
-          );
-        })}
-      </ScrollView>
+            return (
+              <View style={styles.goalContainer} key={itemData.item.id}>
+                <Text style={styles.textGoal}>{itemData.item.text}</Text>
+                <View style={styles.actionBtns}>
+                  <Feather
+                    name="edit"
+                    size={24}
+                    color="black"
+                    onPress={() => editGoal(itemData.item.key)}
+                  />
+                  <AntDesign name="delete" size={24} color="black" />
+                </View>
+              </View>
+            );
+          }}
+        />
       </View>
     </View>
   );
@@ -61,12 +76,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "space-between",
     alignItems: "center",
-    backgroundColor:'#A6BC09',
+    backgroundColor: "#A6BC09",
     marginBottom: 24,
-    paddingHorizontal:20,
+    paddingHorizontal: 20,
     borderWidth: 3,
     borderColor: "#005148",
-    borderRadius:9
+    borderRadius: 9,
   },
   textInput: {
     borderWidth: 1,
@@ -83,23 +98,22 @@ const styles = StyleSheet.create({
     flex: 5,
   },
   goalContainer: {
-    flexDirection:'row',
+    flexDirection: "row",
     justifyContent: "space-between",
-    alignItems:'center',
-    padding:8,
-    marginBottom:6,
-    color:'white'
+    alignItems: "center",
+    padding: 8,
+    marginBottom: 6,
+    color: "white",
   },
-  actionBtns:{
-   flexDirection:'row',
-
+  actionBtns: {
+    flexDirection: "row",
   },
-  textGoal:{
-    color:'white', 
-    fontWeight:'bold',
-    backgroundColor:'#019587',
-    borderRadius:8,
-    padding:8,
-    width: '80%',
-  }
+  textGoal: {
+    color: "white",
+    fontWeight: "bold",
+    backgroundColor: "#019587",
+    borderRadius: 8,
+    padding: 8,
+    width: "80%",
+  },
 });
